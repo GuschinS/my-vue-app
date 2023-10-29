@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 function SearchResultFetcher(props) {
   const [searchResult, setSearchResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleSearchFetcher = async () => {
+  const handleSearchFetcher = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(`https://swapi.dev/api/people/?search=${props.result}`);
@@ -15,9 +14,10 @@ function SearchResultFetcher(props) {
       console.error(error);
       setSearchResult(null);
     } finally {
-      setIsLoading(false); // Устанавливаем состояние загрузки после завершения запроса
+      setIsLoading(false);
     }
-  };
+  }, [props.result]);
+
   const resultLocalStorage = localStorage.getItem('searchResult');
 
   useEffect(() => {
@@ -25,6 +25,7 @@ function SearchResultFetcher(props) {
       handleSearchFetcher();
     }
   }, [handleSearchFetcher, resultLocalStorage]);
+  const searchResultString = JSON.stringify(searchResult);
 
   return (
     <div>
@@ -32,7 +33,7 @@ function SearchResultFetcher(props) {
         <div>
           {isLoading ? (
             <p>Загрузка данных...</p>
-          ) : JSON.stringify(searchResult).includes('name') ? (
+          ) : searchResultString.includes('name') ? (
             <div>
               <h2>Результат поиска:</h2>
               <textarea
