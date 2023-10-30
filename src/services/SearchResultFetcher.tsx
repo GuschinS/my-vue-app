@@ -25,7 +25,6 @@ function SearchResultFetcher(props) {
       handleSearchFetcher();
     }
   }, [handleSearchFetcher, resultLocalStorage]);
-  const searchResultString = JSON.stringify(searchResult);
 
   return (
     <div>
@@ -33,15 +32,18 @@ function SearchResultFetcher(props) {
         <div>
           {isLoading ? (
             <p>Загрузка данных...</p>
-          ) : searchResultString.includes('name') ? (
+          ) : searchResult && searchResult.results && searchResult.results.length > 0 ? (
             <div>
               <h2>Результат поиска:</h2>
-              <textarea
-                rows="40"
-                cols="150"
-                value={JSON.stringify(searchResult, null, 2)}
-                readOnly
-              />
+              <div className="result-cards">
+                {searchResult.results.map((result, index) => (
+                  <div key={index} className="result-card">
+                    <h3>{result.name}</h3>
+                    <p>Рост: {result.height} см</p>
+                    <p>Вес: {result.mass} кг</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <p>Не найдено...</p>
