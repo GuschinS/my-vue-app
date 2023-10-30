@@ -67,3 +67,17 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.result-cards {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.result-card {
+  width: 13%;
+  border: solid 1px;
+  padding: 1rem;
+  margin: 1rem;
+}
